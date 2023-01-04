@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "12CcXjZ7ZUbOLGHxKJkLwbukCbH4CTFu5570okcG9CHET2SjdBiE1d8QGKRWqc9qmETc74a7ZS7qOzzYppZpNw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\108105\\Documents\\Teste-Nivelamento-Desenvolvedor-CSharp- (6)\\Questao2\\Questao2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\108105\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
