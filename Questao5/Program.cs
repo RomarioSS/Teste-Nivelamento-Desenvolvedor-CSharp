@@ -1,11 +1,32 @@
-using MediatR;
+ï»¿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Questao5.Application.Commands;
+using Questao5.Application.Queries;
+using Questao5.Infrastructure.Database.CommandStore;
+using Questao5.Infrastructure.Database.QueryStore;
 using Questao5.Infrastructure.Sqlite;
 using System.Reflection;
+using FluentValidation.AspNetCore;
+using Questao5.Application.Commands.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining(typeof(CreateTransactionCommandValidator)));
+
+builder.Services.AddApiVersioning(opt =>
+{
+    opt.DefaultApiVersion = new ApiVersion(1, 0);
+    opt.ReportApiVersions = true;
+    opt.AssumeDefaultVersionWhenUnspecified = true;
+});
+
+builder.Services.AddVersionedApiExplorer(opt =>
+{
+    opt.GroupNameFormat = "'v'VVV";
+    opt.SubstituteApiVersionInUrl = true;
+});
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
@@ -16,6 +37,11 @@ builder.Services.AddSingleton<IDatabaseBootstrap, DatabaseBootstrap>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<ITransactionCommandStore, TransactionCommandStore>();
+builder.Services.AddScoped<ITransactionQueryStore, TransactionQueryStore>();
+builder.Services.AddScoped<ICheckingAccountQueryStore, CheckingAccountQueryStore>();
+builder.Services.AddScoped<IIdempotencyCommandStore, IdempotencyCommandStore>();
 
 var app = builder.Build();
 
@@ -32,6 +58,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
 // sqlite
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 app.Services.GetService<IDatabaseBootstrap>().Setup();
@@ -39,7 +66,7 @@ app.Services.GetService<IDatabaseBootstrap>().Setup();
 
 app.Run();
 
-// Informações úteis:
+// Informaï¿½ï¿½es ï¿½teis:
 // Tipos do Sqlite - https://www.sqlite.org/datatype3.html
 
 
